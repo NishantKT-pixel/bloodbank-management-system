@@ -1,12 +1,11 @@
 <?php
-include "config.php";
+require_once "../config/config.php";
 
 if(isset($_POST['login'])){
     $username=$_POST['username'];
     $password=$_POST['password'];
-
     $query="SELECT * FROM admin WHERE username='$username' AND password='$password' ";
-    $result=mysqli_query($conn,$query);
+    $result=mysqli_query($conn , $query );
 
     if(mysqli_num_rows($result)==1){
         header("Location:dashboard.php");
@@ -19,7 +18,7 @@ if(isset($_POST['login'])){
 
 <h2>Admin Login</h2>
 
-<form method="POST">
+<form action="login.php" method="POST">    
 <input type="text" name="username" placeholder="Username" required>
 <br><br>
 

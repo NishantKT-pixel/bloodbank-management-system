@@ -1,28 +1,34 @@
 <?php
 include "config.php";
 
-if(isset($_POST['submit'])){
-    $name=$_POST['name'];
-    $age=$_POST['age'];
-    $gender = $_POST['gender'];
+if(isset($_POST['submit']))
+{
+
+$name = $_POST['name'];
+$age = $_POST['age'];
+$gender = $_POST['gender'];
 $blood_group = $_POST['blood_group'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
-$last_donation_date = $_POST['last_donation_date'];
 
-$query="INSERT INTO donor(name,age,gender,blood_group,phone,address,last_donation_date)
-VALUES('$name','$age','$gender','$blood_group','$phone','$address','$last_donation_date')";
+$query = "INSERT INTO patient(name,age,gender,blood_group,phone,address)
+VALUES('$name','$age','$gender','$blood_group','$phone','$address')";
 
 mysqli_query($conn,$query);
 
-echo "Donor added successfully";
+echo "Patient added successfully";
+
 }
 ?>
-<h2>Add Donor</h2>
+
+<h2>Add Patient</h2>
+
 <form method="POST">
-    Name<br>
-    <input type="text" name="name" required><br><br>
-    Age<br>
+
+Name<br>
+<input type="text" name="name" required><br><br>
+
+Age<br>
 <input type="number" name="age" required><br><br>
 
 Gender<br>
@@ -49,9 +55,6 @@ Phone<br>
 Address<br>
 <textarea name="address"></textarea><br><br>
 
-Last Donation Date<br>
-<input type="date" name="last_donation_date"><br><br>
-
-<button name="submit">Add Donor</button>
+<button name="submit">Add Patient</button>
 
 </form>
