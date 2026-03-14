@@ -33,7 +33,7 @@ Gender<br>
 <option>Male</option>
 <option>Female</option>
 </select><br><br>
-
+    
 Blood Group<br>
 <select name="blood_group">
 <option>A+</option>
