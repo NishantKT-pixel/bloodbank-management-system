@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include "../config/config.php";
 
 $result = mysqli_query($conn,"SELECT * FROM patient");
 ?>
@@ -31,6 +31,9 @@ while($row = mysqli_fetch_assoc($result))
 <td><?php echo $row['blood_group']; ?></td>
 <td><?php echo $row['phone']; ?></td>
 
+<td>
+<a href="delete_patient.php?id=<?php echo $row['patient_id']; ?>">Delete</a>
+</td>
 </tr>
 
 <?php

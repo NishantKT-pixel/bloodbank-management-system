@@ -8,10 +8,9 @@ if(isset($_POST['submit'])){
 $blood_group = $_POST['blood_group'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
-$last_donation_date = $_POST['last_donation_date'];
 
-$query="INSERT INTO donor(name,age,gender,blood_group,phone,address,last_donation_date)
-VALUES('$name','$age','$gender','$blood_group','$phone','$address','$last_donation_date')";
+$query="INSERT INTO donor(name,age,gender,blood_group,phone,address)
+VALUES('$name','$age','$gender','$blood_group','$phone','$address')";
 
 mysqli_query($conn,$query);
 
@@ -51,9 +50,6 @@ Phone<br>
 
 Address<br>
 <textarea name="address"></textarea><br><br>
-
-Last Donation Date<br>
-<input type="date" name="last_donation_date"><br><br>
 
 <button name="submit">Add Donor</button><br>
 </form>

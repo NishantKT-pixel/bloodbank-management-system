@@ -1,7 +1,7 @@
 <?php
-include "..config/config.php";
+require_once "../config.php";
 
-$result = mysqli_query($conn,"SELECT * FROM blood_inventory");
+$result = mysqli_query($conn , "SELECT * FROM blood_inventory");
 ?>
 
 <h2>Blood Inventory</h2>
@@ -16,8 +16,10 @@ $result = mysqli_query($conn,"SELECT * FROM blood_inventory");
 </tr>
 
 <?php
-while($row = mysqli_fetch_assoc($result)){
+while($row = mysqli_fetch_assoc($result))
+    {
 ?>
+<tr>
 <td><?php echo $row['inventory_id']; ?></td>
 <td><?php echo $row['blood_group']; ?></td>
 <td><?php echo $row['units_available']; ?></td>
