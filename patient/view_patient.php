@@ -41,3 +41,5 @@ while($row = mysqli_fetch_assoc($result))
 ?>
 
 </table>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>

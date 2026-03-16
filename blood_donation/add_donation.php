@@ -1,5 +1,5 @@
 <?php
-include "../config.php";
+require_once("../config/config.php");
 ?>
 
 <h2>Add Blood Donation</h2>
@@ -53,3 +53,5 @@ echo "Donation added and inventory updated.";
 }
 
 ?>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>

@@ -58,3 +58,5 @@ Address<br>
 <button name="submit">Add Patient</button>
 
 </form>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>

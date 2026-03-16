@@ -52,4 +52,7 @@ Address<br>
 <textarea name="address"></textarea><br><br>
 
 <button name="submit">Add Donor</button><br>
+
 </form>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>

@@ -15,7 +15,7 @@ $result = mysqli_query($conn,"SELECT * FROM donor");
 <th>Gender</th>
 <th>Blood Group</th>
 <th>Phone</th>
-<th>Action</th>
+<th>Address</th>
 </tr>
 
 <?php
@@ -44,3 +44,5 @@ while($row = mysqli_fetch_assoc($result))
 ?>
 
 </table>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>

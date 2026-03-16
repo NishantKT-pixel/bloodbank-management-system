@@ -18,6 +18,10 @@ bloodbank/
 │   ├── add_patient.php
 │   └── view_patient.php
 │
+|__blood_inventory/
+|   |__
+|
+|
 ├── assets/
 │   ├── css/
 │   ├── js/
@@ -82,7 +86,7 @@ patient_id INT,
 blood_group VARCHAR(5),
 request_date DATE,
 quantity INT,
-status VARCHAR(20)
+status VARCHAR(20) DEFAULT 'Pending'
 );
 
 Admin (Blood Bank Staff)

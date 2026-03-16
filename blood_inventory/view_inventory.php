@@ -1,5 +1,5 @@
 <?php
-require_once "../config.php";
+require_once("../config/config.php");
 
 $result = mysqli_query($conn , "SELECT * FROM blood_inventory");
 ?>
@@ -30,3 +30,5 @@ while($row = mysqli_fetch_assoc($result))
 }
 ?>
 </table>
+<br><br>
+<a href="../admin/dashboard.php" >Back to dashboard</a>
