@@ -1,5 +1,30 @@
+<style>
+body {
+    font-family: Arial;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
 <?php
-require_once "../config/config.php";
+session_start();
+include "../config/config.php";
 
 if(isset($_POST['login'])){
     $username=$_POST['username'];

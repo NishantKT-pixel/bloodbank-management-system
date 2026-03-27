@@ -1,3 +1,28 @@
+
+<style>
+body {
+    font-family: Arial;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
 <h1>Blood Bank Dashboard</h1>
 <a href="../donor/add_donor.php">Add Donor</a><br><br>
 <a href="../donor/view_donor.php">View Donors</a><br><br>
@@ -16,3 +41,4 @@
 <a href="../blood_inventory/view_inventory.php">View Blood Inventory</a><br><br>
 
 <a href="logout.php">Logout</a>
+<br>

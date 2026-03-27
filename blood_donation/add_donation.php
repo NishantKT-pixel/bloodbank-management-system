@@ -1,3 +1,55 @@
+<style>
+body {
+    font-family: Arial;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
+<div style="background:blue;padding:20px;">
+
+<a href="../admin/dashboard.php" style="color:white;margin-right:10px;">Dashboard</a>
+
+<a href="../donor/add_donor.php" style="color:white;margin-right:10px;">Add Donor</a>
+
+<a href="../donor/view_donor.php" style="color:white;margin-right:10px;">View Donor</a>
+
+<a href="../patient/add_patient.php" style="color:white;margin-right:10px;">Add Patient</a>
+
+<a href="../patient/view_patient.php" style="color:white;margin-right:10px;">View Patient</a>
+
+<a href="../blood_donation/add_donation.php" style="color:white;margin-right:10px;">Add Donation</a>
+
+<a href="../blood_donation/view_donation.php" style="color:white;margin-right:10px;">View Donation</a>
+
+<a href="../blood_request/add_request.php" style="color:white;margin-right:10px;">Add Request</a>
+
+<a href="../blood_request/view_request.php" style="color:white;margin-right:10px;">View Request</a>
+
+<a href="../blood_inventory/view_inventory.php" style="color:white;margin-right:10px;">Inventory</a>
+
+<a href="../admin/logout.php" style="color:red;margin-right:20px;">Logout</a>
+
+</div>
+
+<br>
+
 <?php
 require_once("../config/config.php");
 ?>
@@ -7,7 +59,24 @@ require_once("../config/config.php");
 <form method="POST">
 
 Donor ID:
-<input type="number" name="donor_id" required><br><br>
+<select name="donor_id">
+
+<?php
+$result = mysqli_query($conn,"SELECT * FROM donor");
+
+while($row = mysqli_fetch_assoc($result))
+{
+?>
+<option value="<?php echo $row['donor_id']; ?>">
+<?php echo $row['name']; ?>
+</option>
+
+<?php
+}
+?>
+
+</select>
+<br><br>
 
 Blood Group:
 <select name="blood_group">

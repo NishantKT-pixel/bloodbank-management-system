@@ -104,3 +104,7 @@ Admin
  ├── Manage Blood Inventory
  ├── Process Blood Requests
  └── Record Blood Donations
+
+ Improvement
+ 1.Added dropdown in add_donation.
+ 2.Added Navigation Bar(For better user experience).
