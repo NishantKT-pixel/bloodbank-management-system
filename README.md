@@ -1,5 +1,5 @@
 Blood Bank Management System Folder Structure:
-bloodbank/
+bloodbank/old folder structure
 │
 ├── config/
 │   └── config.php
@@ -29,6 +29,83 @@ bloodbank/
 │
 ├── index.php
 └── README.md
+
+
+New Folder structure
+bloodbank/
+│
+├── config/
+│   └── config.php                    # Database connection
+│
+├── admin/
+│   ├── login.php
+│   ├── dashboard.php
+│   ├── logout.php
+│   └── session_check.php            # NEW: Session verification
+│
+├── donor/
+│   ├── add_donor.php
+│   ├── view_donor.php
+│   ├── edit_donor.php               # NEW
+│   ├── delete_donor.php
+│   └── search_donor.php             # NEW
+│
+├── patient/
+│   ├── add_patient.php
+│   ├── view_patient.php
+│   ├── edit_patient.php             # NEW
+│   └── delete_patient.php
+│
+├── blood_donation/
+│   ├── add_donation.php
+│   ├── view_donation.php
+│   └── donation_history.php         # NEW
+│
+├── blood_request/
+│   ├── add_request.php
+│   ├── view_request.php
+│   ├── approve_request.php
+│   └── reject_request.php
+│
+├── blood_inventory/
+│   ├── view_inventory.php
+│   ├── low_stock_alerts.php         # NEW
+│   └── inventory_report.php         # NEW
+│
+├── helpers/                          # NEW FOLDER
+│   ├── validation.php
+│   ├── auth.php
+│   ├── database.php
+│   └── error_handler.php
+│
+├── templates/                        # NEW FOLDER
+│   ├── navbar.php
+│   ├── header.php
+│   ├── footer.php
+│   └── messages.php                 # For success/error display
+│
+├── css/                              # NEW FOLDER (if using)
+│   └── style.css
+│
+├── database/                         # NEW FOLDER
+│   ├── schema.sql                   # CREATE TABLE statements
+│   ├── sample_data.sql              # Sample data for testing
+│   └── backup.sql                   # For backups
+│
+├── tests/                            # NEW FOLDER
+│   ├── test_cases.md
+│   ├── test_data.sql
+│   └── test_results.txt
+│
+├── docs/                             # NEW FOLDER
+│   ├── DEPLOYMENT.md
+│   ├── TROUBLESHOOTING.md
+│   ├── API_DOCUMENTATION.md
+│   └── ARCHITECTURE.md
+│
+├── .gitignore                        # NEW: For version control
+├── README.md                         # Updated
+└── index.php
 
 Database Query Format:
 1. Admin
