@@ -1,15 +1,22 @@
 <?php
+// blood_request/reject_request.php
+session_start();
+require_once('../config/db.php');
 
-include "../config/config.php";
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../admin/login.php");
+    exit();
+}
 
-$id = $_GET['id'];
+$request_id = (int)$_GET['id'];
 
-mysqli_query($conn,"UPDATE blood_request 
-SET status='Rejected' 
-WHERE request_id='$id'");
+// Update status to Rejected
+$stmt = $conn->prepare("UPDATE blood_request SET status = 'Rejected' WHERE request_id = ?");
+$stmt->bind_param("i", $request_id);
 
-echo "Request Rejected Successfully";
-
-echo "<br><a href='view_request.php'>Back</a>";
-
+if ($stmt->execute()) {
+    header("Location: view_request.php?msg=Rejected");
+} else {
+    echo "Error updating record.";
+}
 ?>

@@ -1,106 +1,83 @@
-<style>
-body {
-    font-family: Arial;
-}
-
-table {
-    border-collapse: collapse;
-    width: 80%;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-
-th {
-    background-color: black;
-    color: white;
-}
-
-a {
-    text-decoration: none;
-}
-</style>
-
-<div style="background:blue;padding:20px;">
-
-<a href="../admin/dashboard.php" style="color:white;margin-right:10px;">Dashboard</a>
-
-<a href="../donor/add_donor.php" style="color:white;margin-right:10px;">Add Donor</a>
-
-<a href="../donor/view_donor.php" style="color:white;margin-right:10px;">View Donor</a>
-
-<a href="../patient/add_patient.php" style="color:white;margin-right:10px;">Add Patient</a>
-
-<a href="../patient/view_patient.php" style="color:white;margin-right:10px;">View Patient</a>
-
-<a href="../blood_donation/add_donation.php" style="color:white;margin-right:10px;">Add Donation</a>
-
-<a href="../blood_donation/view_donation.php" style="color:white;margin-right:10px;">View Donation</a>
-
-<a href="../blood_request/add_request.php" style="color:white;margin-right:10px;">Add Request</a>
-
-<a href="../blood_request/view_request.php" style="color:white;margin-right:10px;">View Request</a>
-
-<a href="../blood_inventory/view_inventory.php" style="color:white;margin-right:10px;">Inventory</a>
-
-<a href="../admin/logout.php" style="color:red;margin-right:20px;">Logout</a>
-
-</div>
-
-<br>
-
 <?php
-require_once("../config/config.php");
+// blood_request/view_request.php
+session_start();
+require_once('../config/db.php');
 
-$result = mysqli_query($conn," SELECT patient.name, blood_request. * FROM blood_request JOIN patient ON patient.patient_id = blood_request.patient_id");
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../admin/login.php");
+    exit();
+}
 
+// SQL Join to get Patient Name along with Request details
+$sql = "SELECT r.*, p.name as patient_name 
+        FROM blood_request r 
+        JOIN patient p ON r.patient_id = p.patient_id 
+        ORDER BY r.request_id DESC";
+$result = $conn->query($sql);
 ?>
 
-<h2>Blood Request List</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Requests</title>
+    
+    <style>
+        /* 1. Table & General Styles */
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
+        .container { padding: 20px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; color: #333; }
+        .status-pending { color: orange; font-weight: bold; }
+        .status-approved { color: green; font-weight: bold; }
+        
+        /* 2. Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5cb85c; 
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .btn:hover { opacity: 0.9; background-color: #4cae4c; }
+        .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+<?php include('../includes/header.php'); ?>    
+<a href="add_request.php" class="btn">New Request</a>
+    <h2>Blood Requests</h2>
 
-<table border="1" cellpadding="10">
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Blood Group</th>
+            <th>Units</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        <?php while($row = $result->fetch_assoc()): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($row['patient_name']); ?></td>
+            <td><?php echo $row['blood_group']; ?></td>
+            <td><?php echo $row['quantity']; ?></td>
+            <td class="status-<?php echo strtolower($row['status']); ?>"><?php echo $row['status']; ?></td>
+            <td>
+                <?php if($row['status'] == 'Pending'): ?>
+                    <a href="approve_request.php?id=<?php echo $row['request_id']; ?>" 
+                       onclick="return confirm('Approve this request and deduct from inventory?')">Approve</a> |
 
-<tr>
-<th>Request ID</th>
-<th>Patient Name</th>
-<th>Blood Group</th>
-<th>Request Date</th>
-<th>Quantity</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-<?php
-
-while($row = mysqli_fetch_assoc($result))
-{
-?>
-
-<tr>
-
-<td><?php echo $row['request_id']; ?></td>
-<td><?php echo $row['name']; ?></td>
-<td><?php echo $row['blood_group']; ?></td>
-<td><?php echo $row['request_date']; ?></td>
-<td><?php echo $row['quantity']; ?></td>
-<td><?php echo $row['status']; ?></td>
-
-<td>
-
-<a href="approve_request.php?id=<?php echo $row['request_id']; ?>">Approve</a> |
-
-<a href="reject_request.php?id=<?php echo $row['request_id']; ?>">Reject</a>
-
-</td>
-
-</tr>
-
-<?php
-}
-?>
-
-</table>
-<br><br>
-<a href="../admin/dashboard.php">Back to Dashboard</a>
+                    <a href="reject_request.php?id=<?php echo $row['request_id']; ?>" style="color:red;">Reject</a>   
+                <?php else: ?>
+                    --
+                <?php endif; ?>
+                
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+</body>
+</html>

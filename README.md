@@ -1,187 +1,50 @@
-Blood Bank Management System Folder Structure:
-bloodbank/old folder structure
-│
-├── config/
-│   └── config.php
-│
-├── admin/
-│   ├── login.php
-│   ├── dashboard.php
-│   └── logout.php
-│
-├── donor/
-│   ├── add_donor.php
-│   ├── view_donor.php
-│   └── delete_donor.php
-│
-├── patient/
-│   ├── add_patient.php
-│   └── view_patient.php
-│
-|__blood_inventory/
-|   |__
-|
-|
-├── assets/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-├── index.php
-└── README.md
+# Blood Bank Management System (BBMS)
 
+A professional, web-based management system built using Software Development Life Cycle (SDLC) principles. This project focuses on secure data handling, relational database integrity, and efficient inventory management for blood bank operations.
 
-New Folder structure
-bloodbank/
-│
-├── config/
-│   └── config.php                    # Database connection
-│
-├── admin/
-│   ├── login.php
-│   ├── dashboard.php
-│   ├── logout.php
-│   └── session_check.php            # NEW: Session verification
-│
-├── donor/
-│   ├── add_donor.php
-│   ├── view_donor.php
-│   ├── edit_donor.php               # NEW
-│   ├── delete_donor.php
-│   └── search_donor.php             # NEW
-│
-├── patient/
-│   ├── add_patient.php
-│   ├── view_patient.php
-│   ├── edit_patient.php             # NEW
-│   └── delete_patient.php
-│
-├── blood_donation/
-│   ├── add_donation.php
-│   ├── view_donation.php
-│   └── donation_history.php         # NEW
-│
-├── blood_request/
-│   ├── add_request.php
-│   ├── view_request.php
-│   ├── approve_request.php
-│   └── reject_request.php
-│
-├── blood_inventory/
-│   ├── view_inventory.php
-│   ├── low_stock_alerts.php         # NEW
-│   └── inventory_report.php         # NEW
-│
-├── helpers/                          # NEW FOLDER
-│   ├── validation.php
-│   ├── auth.php
-│   ├── database.php
-│   └── error_handler.php
-│
-├── templates/                        # NEW FOLDER
-│   ├── navbar.php
-│   ├── header.php
-│   ├── footer.php
-│   └── messages.php                 # For success/error display
-│
-├── css/                              # NEW FOLDER (if using)
-│   └── style.css
-│
-├── database/                         # NEW FOLDER
-│   ├── schema.sql                   # CREATE TABLE statements
-│   ├── sample_data.sql              # Sample data for testing
-│   └── backup.sql                   # For backups
-│
-├── tests/                            # NEW FOLDER
-│   ├── test_cases.md
-│   ├── test_data.sql
-│   └── test_results.txt
-│
-├── docs/                             # NEW FOLDER
-│   ├── DEPLOYMENT.md
-│   ├── TROUBLESHOOTING.md
-│   ├── API_DOCUMENTATION.md
-│   └── ARCHITECTURE.md
-│
-├── .gitignore                        # NEW: For version control
-├── README.md                         # Updated
-└── index.php
+## 🚀 Features
+- **Secure Admin Authentication:** Protected login using PHP sessions and Prepared Statements to prevent SQL injection.
+- **Donor Management:** Complete CRUD (Create, Read, Update, Delete) operations with strict age and phone validation.
+- **Patient Management:** Dedicated module for tracking patients requiring blood transfusions.
+- **Blood Inventory System:** Real-time monitoring of 8 blood groups (A+, A-, B+, B-, O+, O-, AB+, AB-) with low-stock alerts.
+- **Transaction Logic:** Automated stock updates. Adding a donation increases inventory; approving a request decreases it.
+- **Audit Logs:** Permanent record of approved and rejected blood requests for accountability.
 
-Database Query Format:
-1. Admin
-  CREATE TABLE admin (
-  admin_id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100),
-username VARCHAR(50),
-password VARCHAR(100),
-contact VARCHAR(15)
-);
+## 🛠️ Tech Stack
+- **Backend:** PHP 8.x
+- **Database:** MySQL
+- **Environment:** XAMPP 
+- **Frontend:** HTML5, CSS3 (Clean, professional UI)
 
-2. Donor
-CREATE TABLE donor (
-donor_id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100),
-age INT,
-gender VARCHAR(10),
-blood_group VARCHAR(5),
-phone VARCHAR(15),
-address TEXT
-);
+## 📥 Installation & Setup
+1. **Clone/Download** the repository and place the `bloodbank` folder into your `htdocs` directory (e.g., `C:/xampp/htdocs/bloodbank`).
+2. **Start XAMPP:** Open XAMPP Control Panel and start **Apache** and **MySQL**.
+3. **Import Database:**
+   - Go to [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/).
+   - Create a new database named `bloodbank_db`.
+   - Click the **Import** tab and select the `bloodbank_db.sql` file located in the `/database` folder of this project.
+4. **Configure Connection:**
+   - Open `config/db.php` and verify the database credentials (default is `root` with no password).
+5. **Access the App:**
+   - Open your browser and go to `http://localhost/bloodbank/admin/login.php`.
 
-3. Patient
-CREATE TABLE patient (
-patient_id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100),
-age INT,
-gender VARCHAR(10),
-blood_group VARCHAR(5),
-phone VARCHAR(15),
-address TEXT
-);
+## 🔑 Admin Credentials
+- **Username:** `admin`
+- **Password:** `admin123`
 
-4. blood inventory
-CREATE TABLE blood_inventory (
-inventory_id INT AUTO_INCREMENT PRIMARY KEY,
-blood_group VARCHAR(5),
-units_available INT,
-expiry_date DATE
-);
+## 📂 Project Structure
+- `/admin`: Authentication and Dashboard logic.
+- `/donor`: Donor registration and records.
+- `/patient`: Patient registration and records.
+- `/blood_donation`: Logic for increasing blood inventory.
+- `/blood_request`: Workflow for approving/rejecting blood issues.
+- `/blood_inventory`: Real-time stock status.
+- `/config`: Centralized database connection.
+- `/includes`: Reusable UI components (header/navigation).
+- `/database`: Contains the SQL export file.
 
-5. blood donotion
-CREATE TABLE blood_donation (
-donation_id INT AUTO_INCREMENT PRIMARY KEY,
-donor_id INT,
-blood_group VARCHAR(5),
-donation_date DATE,
-quantity INT
-);
-
-6.  blood request
-CREATE TABLE blood_request (
-request_id INT AUTO_INCREMENT PRIMARY KEY,
-patient_id INT,
-blood_group VARCHAR(5),
-request_date DATE,
-quantity INT,
-status VARCHAR(20) DEFAULT 'Pending'
-);
-
-Admin (Blood Bank Staff)
-The admin performs everything:
-Login to system
-Add / update / delete donors
-Add / update patients
-Monitor blood inventory
-Process blood requests
-Issue blood
-
-Admin
- ├── Manage Donors
- ├── Manage Patients
- ├── Manage Blood Inventory
- ├── Process Blood Requests
- └── Record Blood Donations
-
- Improvement
- 1.Added dropdown in add_donation.
- 2.Added Navigation Bar(For better user experience).
+## 📝 Software Engineering Practices Applied
+- **SDLC Model:** Structured approach from Requirement Gathering to Testing.
+- **Security:** Use of Prepared Statements and Input Sanitization (`htmlspecialchars`).
+- **Data Integrity:** Foreign Key constraints and Transactional Logic.
+- **DRY Principle:** Modularized code using PHP `include` for headers and database config.

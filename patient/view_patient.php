@@ -1,98 +1,76 @@
-<style>
-body {
-    font-family: Arial;
-}
-
-table {
-    border-collapse: collapse;
-    width: 80%;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-
-th {
-    background-color: black;
-    color: white;
-}
-
-a {
-    text-decoration: none;
-}
-</style>
-
-<div style="background:blue;padding:20px;">
-
-<a href="../admin/dashboard.php" style="color:white;margin-right:10px;">Dashboard</a>
-
-<a href="../donor/add_donor.php" style="color:white;margin-right:10px;">Add Donor</a>
-
-<a href="../donor/view_donor.php" style="color:white;margin-right:10px;">View Donor</a>
-
-<a href="../patient/add_patient.php" style="color:white;margin-right:10px;">Add Patient</a>
-
-<a href="../patient/view_patient.php" style="color:white;margin-right:10px;">View Patient</a>
-
-<a href="../blood_donation/add_donation.php" style="color:white;margin-right:10px;">Add Donation</a>
-
-<a href="../blood_donation/view_donation.php" style="color:white;margin-right:10px;">View Donation</a>
-
-<a href="../blood_request/add_request.php" style="color:white;margin-right:10px;">Add Request</a>
-
-<a href="../blood_request/view_request.php" style="color:white;margin-right:10px;">View Request</a>
-
-<a href="../blood_inventory/view_inventory.php" style="color:white;margin-right:10px;">Inventory</a>
-
-<a href="../admin/logout.php" style="color:red;margin-right:20px;">Logout</a>
-
-</div>
-
-<br>
-
 <?php
-include "../config/config.php";
+// donor/view_donor.php
+session_start();
+require_once('../config/db.php');
 
-$result = mysqli_query($conn,"SELECT * FROM patient");
+// Security Check
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../admin/login.php");
+    exit();
+}
+
+// Fetch all donors
+$result = $conn->query("SELECT * FROM patient ORDER BY patient_id DESC");
 ?>
 
-<h2>Patient List</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Patient</title>
+    <style>
+        /* 1. Table & General Styles */
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
+        .container { padding: 20px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; color: #333; }
+        
+        /* 2. Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5cb85c; 
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .btn:hover { opacity: 0.9; background-color: #4cae4c; }
+        .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+   <?php include('../includes/header.php'); ?>
+    <a href="add_patient.php" class="btn">+ Add New Patient</a>
+    <h2>Registered Patient List</h2>
 
-<table border="1" cellpadding="10">
-
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Age</th>
-<th>Gender</th>
-<th>Blood Group</th>
-<th>Phone</th>
-</tr>
-
-<?php
-while($row = mysqli_fetch_assoc($result))
-{
-?>
-
-<tr>
-
-<td><?php echo $row['patient_id']; ?></td>
-<td><?php echo $row['name']; ?></td>
-<td><?php echo $row['age']; ?></td>
-<td><?php echo $row['gender']; ?></td>
-<td><?php echo $row['blood_group']; ?></td>
-<td><?php echo $row['phone']; ?></td>
-
-<td>
-<a href="delete_patient.php?id=<?php echo $row['patient_id']; ?>">Delete</a>
-</td>
-</tr>
-
-<?php
-}
-?>
-
-</table>
-<br><br>
-<a href="../admin/dashboard.php" >Back to dashboard</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Blood Group</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+        <?php while($row = $result->fetch_assoc()): ?>
+        <tr>
+            <td><?php echo $row['patient_id']; ?></td>
+            <td><?php echo htmlspecialchars($row['name']); ?></td>
+            <td><?php echo $row['age']; ?></td>
+            <td><?php echo $row['gender']; ?></td>
+            <td><?php echo $row['blood_group']; ?></td>
+            <td><?php echo htmlspecialchars($row['phone']); ?></td>
+            <td>
+                <a href="edit_patient.php?id=<?php echo $row['patient_id']; ?>">Edit</a> |
+                <a href="delete_patient.php?id=<?php echo $row['patient_id']; ?>" 
+                   class="btn-delete" 
+                   onclick="return confirm('Are you sure you want to delete this patient?')">Delete</a>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+</body>
+</html>

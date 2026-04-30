@@ -1,114 +1,87 @@
-<style>
-body {
-    font-family: Arial;
-}
-
-table {
-    border-collapse: collapse;
-    width: 80%;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-
-th {
-    background-color: black;
-    color: white;
-}
-
-a {
-    text-decoration: none;
-}
-</style>
-<div style="background:blue;padding:20px;">
-
-<a href="../admin/dashboard.php" style="color:white;margin-right:10px;">Dashboard</a>
-
-<a href="../donor/add_donor.php" style="color:white;margin-right:10px;">Add Donor</a>
-
-<a href="../donor/view_donor.php" style="color:white;margin-right:10px;">View Donor</a>
-
-<a href="../patient/add_patient.php" style="color:white;margin-right:10px;">Add Patient</a>
-
-<a href="../patient/view_patient.php" style="color:white;margin-right:10px;">View Patient</a>
-
-<a href="../blood_donation/add_donation.php" style="color:white;margin-right:10px;">Add Donation</a>
-
-<a href="../blood_donation/view_donation.php" style="color:white;margin-right:10px;">View Donation</a>
-
-<a href="../blood_request/add_request.php" style="color:white;margin-right:10px;">Add Request</a>
-
-<a href="../blood_request/view_request.php" style="color:white;margin-right:10px;">View Request</a>
-
-<a href="../blood_inventory/view_inventory.php" style="color:white;margin-right:10px;">Inventory</a>
-
-<a href="../admin/logout.php" style="color:red;margin-right:20px;">Logout</a>
-
-</div>
-
-<br>
-
 <?php
-include "../config/config.php";
+session_start();
+require_once('../config/db.php');
 
-if(isset($_POST['submit']))
-{
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../admin/login.php");
+    exit();
+}
 
-$name = $_POST['name'];
-$age = $_POST['age'];
-$gender = $_POST['gender'];
-$blood_group = $_POST['blood_group'];
-$phone = $_POST['phone'];
-$address = $_POST['address'];
+$success = false; // Track success for the button display
+if (isset($_POST['add_patient'])) {
+    $name = trim($_POST['name']);
+    $age = (int)$_POST['age'];
+    $gender = $_POST['gender'];
+    $blood_group = $_POST['blood_group'];
+    $phone = trim($_POST['phone']);
+    $address = trim($_POST['address']);
 
-$query = "INSERT INTO patient(name,age,gender,blood_group,phone,address)
-VALUES('$name','$age','$gender','$blood_group','$phone','$address')";
+    $errors = [];
+    if (empty($name)) $errors[] = "Name is required.";
+    if ($age < 0 || $age > 120) $errors[] = "Age must be 0-120.";
+    if (!preg_match("/^[0-9]{10}$/", $phone)) $errors[] = "Phone must be 10 digits.";
 
-mysqli_query($conn,$query);
+    if (empty($errors)) {
+        $stmt = $conn->prepare("INSERT INTO patient (name, age, gender, blood_group, phone, address) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sissss", $name, $age, $gender, $blood_group, $phone, $address);
 
-echo "Patient added successfully";
-
+        if ($stmt->execute()) {
+            $success = true;
+        } else {
+            $error_msg = ($conn->errno == 1062) ? "Phone number already registered." : "Database error.";
+        }
+    }
 }
 ?>
 
-<h2>Add Patient</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient - BBMS</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding-top: 80px; display: flex; flex-direction: column; align-items: center; }
+        .form-card { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        .form-card h2 { color: #333; margin-top: 0; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 12px; border: none; background: #b31b1b; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        .btn-view { display: inline-block; width: 100%; padding: 12px; background: #5cb85c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; box-sizing: border-box; }
+        .msg { padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
 
-<form method="POST">
+    <?php include('../includes/home.php'); ?>
 
-Name<br>
-<input type="text" name="name" required><br><br>
+    <div class="form-card">
+        <h2>Register New Patient</h2>
 
-Age<br>
-<input type="number" name="age" required><br><br>
+        <?php 
+        if (!empty($errors)) foreach($errors as $e) echo "<div class='msg' style='background:#f2dede; color:red;'>$e</div>";
+        if ($success) {
+            echo "<div class='msg' style='background:#dff0d8; color:green;'>Patient registered successfully!</div>";
+            echo "<a href='view_patient.php' class='btn-view'>View Patient List →</a>";
+        }
+        if (isset($error_msg)) echo "<div class='msg' style='background:#f2dede; color:red;'>$error_msg</div>";
+        ?>
 
-Gender<br>
-<select name="gender">
-<option>Male</option>
-<option>Female</option>
-</select><br><br>
-
-Blood Group<br>
-<select name="blood_group">
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>AB+</option>
-<option>AB-</option>
-<option>O+</option>
-<option>O-</option>
-</select><br><br>
-
-Phone<br>
-<input type="text" name="phone"><br><br>
-
-Address<br>
-<textarea name="address"></textarea><br><br>
-
-<button name="submit">Add Patient</button>
-
-</form>
-<br><br>
-<a href="../admin/dashboard.php" >Back to dashboard</a>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="number" name="age" placeholder="Age" required>
+            <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <select name="blood_group">
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+            </select>
+            <input type="text" name="phone" placeholder="Phone Number" required>
+            <textarea name="address" placeholder="Address"></textarea>
+            <button type="submit" name="add_patient" class="btn-submit">Register Patient</button>
+        </form>
+    </div>
+</body>
+</html>
